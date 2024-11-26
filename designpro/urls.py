@@ -21,6 +21,6 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('app/', include('app.urls')),
-    path('', RedirectView.as_view(url='/app/', permanent=True)),
+    path('app/', include('interior.urls')),
+    path('', RedirectView.as_view(url='/interior/', permanent=True)),
 ]
