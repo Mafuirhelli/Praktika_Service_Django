@@ -12,7 +12,7 @@ class category(models.Model):
         return self.name
 
 
-class Request(models.Model):
+class Query(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(max_length=1000, help_text="Type a brief description of the interior")
     category = ForeignKey('category', on_delete=models.SET_NULL, null=True)
