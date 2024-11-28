@@ -1,0 +1,26 @@
+{% extends "base_generic.html" %}
+{% block content %}
+<div class="d-flex justify-content-center">
+    <div class="border border-primary w-75 p-3">
+        <form method="POST" novalidate>
+            {% csrf_token %}
+            <h2>Регистрация</h2>
+            {{ form.as_p }}
+            <div class="form-check">
+                <input type="checkbox" id="politics" onclick="check();" value="" autocomplete="off"/>
+                Я согласен(-на) на обработку персональных данных
+            </div>
+            <input type="submit" name="submit"  class="btn btn-primary" disabled="" value="Зарегистрироваться" />
+        </form>
+<script>
+function check() {
+var submit = document.getElementsByName('submit')[0];
+if (document.getElementById('politics').checked)
+submit.disabled = '';
+else
+submit.disabled = 'disabled';
+}
+</script>
+</div>
+</div>
+{% endblock content%}
