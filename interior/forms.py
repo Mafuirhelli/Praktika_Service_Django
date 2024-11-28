@@ -1,21 +1,27 @@
 from django import forms
-from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
-import datetime
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
-class RenewBookForm(forms.Form):
-    renewal_date = forms.DateField(help_text="Enter a date between now and 4 weeks (default 3).")
+class RegisterForm(UserCreationForm):
+    username = forms.CharField(label='Логин')
+    password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Повтор пароля', widget=forms.PasswordInput)
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name','last_name', 'password1', 'password2']
+        labels = {
+            'email': 'E-mail',
+            'first_name': 'Имя',
+            'last_name': 'Фамилия',
+        }
+        widgets = {
+            'email': forms.TextInput(attrs={'class': 'form-input'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-input'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-input'}),
+        }
 
-    def clean_renewal_date(self):
-        data = self.cleaned_data['renewal_date']
-
-        #Проверка того, что дата не выходит за "нижнюю" границу (не в прошлом).
-        if data < datetime.date.today():
-            raise ValidationError(_('Invalid date - renewal in past'))
-
-        #Проверка того, то дата не выходит за "верхнюю" границу (+4 недели).
-        if data > datetime.date.today() + datetime.timedelta(weeks=4):
-            raise ValidationError(_('Invalid date - renewal more than 4 weeks ahead'))
-
-        # Помните, что всегда надо возвращать "очищенные" данные.
-        return data
+        def clean_password2(self):
+            cd = self.cleaned_data
+            if cd['password'] != cd['password2']:
+                raise forms.ValidationError("Пароли не совпадают!")
+            return cd['password2']
