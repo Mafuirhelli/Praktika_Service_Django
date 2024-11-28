@@ -1,17 +1,9 @@
-from django.shortcuts import render
-from .models import Query
+from django.shortcuts import render, redirect
+from .models import Query, Category
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-import datetime
-from django.contrib.auth.decorators import permission_required
-from .forms import RenewBookForm
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
-
+from .forms import RegisterForm
+from django.contrib import messages
+from django.contrib.auth import login
 
 def index(request):
     num_queries_accepted = Query.objects.filter(status__exact='a').count()
@@ -21,6 +13,24 @@ def index(request):
         'index.html',
         context={'num_queries_accepted':num_queries_accepted,},
     )
-class QueryListView(generic.ListView):
-    model = Query.objects.filter(status__exact='a').order_by('-date')
-    paginate_by = 4
+def sign_up(request):
+    if request.method == 'GET':
+        form = RegisterForm()
+        return render(request, 'interior/register.html', {'form': form})
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            user.save()
+            messages.success(request, 'Вы успешно зарегестрировались')
+            login(request, user)
+            return redirect('index')
+        else:
+            return render(request, 'interior/register.html', {'form': form})
+
+
+# def query_create(request):
+#     pass
+# class QueryDetailForm(generic.DetailView):\
+#     model = Query
