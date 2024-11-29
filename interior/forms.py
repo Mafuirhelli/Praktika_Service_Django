@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
-from datetime import datetime
+from datetime import date
 from interior.models import Profile
 from .models import Category
 
@@ -25,11 +25,11 @@ class ProfileForm(forms.ModelForm):
         model = Profile
         fields = ['patronym', 'birthday']
 
-    def clean_birthday(self):
+    def clean_date_of_birth(self):
         dob = self.cleaned_data['birthday']
-        age = (datetime.now() - dob).days / 365
-        if age < 18:
-            raise forms.ValidationError('18+')
+        today = date.today()
+        if (dob.year + 18, dob.month, dob.day) > (today.year, today.month, today.day):
+            raise forms.ValidationError('Вам должно быть 18!')
         return dob
 
 
@@ -66,3 +66,6 @@ class QueryForm(forms.Form):
     description = forms.CharField(max_length=1000)
     category = forms.ModelChoiceField(queryset=Category.objects.all())
     plan = forms.ImageField()
+
+class AddAdminForm(forms.Form):
+    adminUserName = forms.CharField(max_length=150)

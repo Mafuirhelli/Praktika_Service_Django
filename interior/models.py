@@ -42,20 +42,13 @@ class Category(models.Model):
         return self.name
     def get_absolute_url(self):
         return reverse('category-detail', args=[str(self.id)]) #Возвращает url для доступа к конкретной заявке.
-    class Meta:
-        constraints = [
-            UniqueConstraint(
-                Lower('name'),
-                name='genre_name_case_insensitive_unique',
-                violation_error_message="Жанр уже существует (совпадение без учета регистра)"
-            ),
-        ]
 
 class Query(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(max_length=1000, help_text="Type a brief description of the interior")
     category = ForeignKey('Category', on_delete=models.SET_NULL, null=True, help_text="Выберите категорию заявки")
     plan = models.ImageField(upload_to ='images/', help_text="Select a cover for this request", null=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     creationDate = models.DateField(default=date.today)
     design = models.ImageField(upload_to ='images/', null=True)
     LOAN_STATUS = (
