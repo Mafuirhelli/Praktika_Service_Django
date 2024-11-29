@@ -6,7 +6,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from django.urls import reverse
+from django.db.models import UniqueConstraint
+from django.db.models.functions import Lower
 class Profile(models.Model):
     user = models.OneToOneField(
         User,
@@ -40,15 +42,22 @@ class Category(models.Model):
         return self.name
     def get_absolute_url(self):
         return reverse('category-detail', args=[str(self.id)]) #Возвращает url для доступа к конкретной заявке.
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                Lower('name'),
+                name='genre_name_case_insensitive_unique',
+                violation_error_message="Жанр уже существует (совпадение без учета регистра)"
+            ),
+        ]
 
 class Query(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(max_length=1000, help_text="Type a brief description of the interior")
-    category = ForeignKey('Category', on_delete=models.SET_NULL, null=True)
+    category = ForeignKey('Category', on_delete=models.SET_NULL, null=True, help_text="Выберите категорию заявки")
     plan = models.ImageField(upload_to ='images/', help_text="Select a cover for this request", null=True)
     creationDate = models.DateField(default=date.today)
     design = models.ImageField(upload_to ='images/', null=True)
-    adminUserName = models.CharField(max_length=200, null = True, blank = True)
     LOAN_STATUS = (
         ('n', 'New'),
         ('a', 'Accepted for work'),

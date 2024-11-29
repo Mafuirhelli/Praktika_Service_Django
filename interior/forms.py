@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from datetime import datetime
 from interior.models import Profile
+from .models import Category
 
 
 class RussianValidator:
@@ -59,3 +60,9 @@ class RegisterForm(UserCreationForm):
 class LoginForm(forms.Form):
     username = forms.CharField(label='Логин')
     password = forms.CharField(widget=forms.PasswordInput)
+
+class QueryForm(forms.Form):
+    title = forms.CharField(max_length=50)
+    description = forms.CharField(max_length=1000)
+    category = forms.ModelChoiceField(queryset=Category.objects.all())
+    plan = forms.ImageField()

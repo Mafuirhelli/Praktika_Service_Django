@@ -1,0 +1,32 @@
+{% extends "base_generic.html" %}
+{% block content %}
+  <h1>Мои заявки</h1>
+     <p>фильтрация</p>
+  <a href="{% url 'querys_n'%}">Новые</a>
+  <a href="{% url 'querys_a'%}">Принятые в работу</a>
+  <a href="{% url 'querys_d'%}">Выполненные</a>
+  {% if query_list %}
+    <ul>
+      {% for query in query_list %}
+      <li>
+        <hr>
+            <p>Дата создания: {{ query.creationDate }}</p>
+            <p>Название: {{ query.title }}</p>
+            <p>Описание: {{ query.description }}</p>
+            <p>Категория: {{ query.category }}</p>
+        {% if plea.status == 'n' %}
+            <p>Статус: Новая</p>
+        {% elif plea.status == 'a' %}
+            <p>Статус: принято в работу</p>
+        {% else %}
+            <p>Статус: Выполнено</p>
+        {% endif %}
+            <a href="{{ query.get_absolute_url }}/delete/">Удалить заявку</a>
+        <hr>
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>У вас нет заявок</p>
+  {% endif %}
+{% endblock %}
