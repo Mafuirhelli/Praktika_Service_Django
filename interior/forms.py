@@ -18,10 +18,10 @@ class RussianValidator:
 
 class RegisterForm(UserCreationForm):
     username = forms.CharField(label='Логин')
-    first_name = forms.CharField(label="Имя", widget=forms.TextInput(attrs={'class': 'form-input'}), validators=[RussianValidator()], error_messages={'required': 'Введите имя'})
-    last_name = forms.CharField(label="Фамилия", widget=forms.TextInput(attrs={'class': 'form-input'}), validators=[RussianValidator()], error_messages={'required': 'Введите фамилию'})
+    first_name = forms.CharField(label='Имя', widget=forms.TextInput(attrs={'class': 'form-input'}), validators=[RussianValidator()], error_messages={'required': 'Введите имя'})
+    last_name = forms.CharField(label='Фамилия', widget=forms.TextInput(attrs={'class': 'form-input'}), validators=[RussianValidator()], error_messages={'required': 'Введите фамилию'})
     password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Повтор пароля', widget=forms.PasswordInput)\
+    password2 = forms.CharField(label='Повтор пароля', widget=forms.PasswordInput)
 
     class Meta:
         model = User
