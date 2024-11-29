@@ -6,6 +6,7 @@
             {% csrf_token %}
             <h2>Регистрация</h2>
             {{ form.as_p }}
+            {{ profile_form.as_p }}
             <div class="form-check">
                 <input type="checkbox" id="politics" onclick="check();" value="" autocomplete="off"/>
                 Я согласен(-на) на обработку персональных данных

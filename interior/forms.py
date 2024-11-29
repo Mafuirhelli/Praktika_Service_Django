@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
+from datetime import datetime
+from interior.models import Profile
 
 
 class RussianValidator:
@@ -14,6 +16,20 @@ class RussianValidator:
     def __call__(self, value):
         if not (set(value) <= set(self.ALLOWED_CHARS)):
             raise ValidationError(self.message, code=self.code, params={"value": value})
+
+class ProfileForm(forms.ModelForm):
+    patronym = forms.CharField(label='Отчество', widget=forms.TextInput(attrs={'class': 'form-input'}), validators=[RussianValidator()], error_messages={'required': 'Введите отчество'})
+    birthday = forms.DateField(label = 'День рождения', widget=forms.DateInput(attrs={'class': 'form-input'}), error_messages={'requied': 'Введите день рождения'})
+    class Meta:
+        model = Profile
+        fields = ['patronym', 'birthday']
+
+    def clean_birthday(self):
+        dob = self.cleaned_data['birthday']
+        age = (datetime.now() - dob).days / 365
+        if age < 18:
+            raise forms.ValidationError('18+')
+        return dob
 
 
 class RegisterForm(UserCreationForm):
@@ -39,3 +55,7 @@ class RegisterForm(UserCreationForm):
                 raise ValidationError("Пароли не совпадают!")
             return cd['password2']
 
+
+class LoginForm(forms.Form):
+    username = forms.CharField(label='Логин')
+    password = forms.CharField(widget=forms.PasswordInput)
