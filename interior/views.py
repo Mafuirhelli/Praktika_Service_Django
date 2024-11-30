@@ -16,7 +16,6 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy,reverse
 
-
 def user_page(request):
     username = request.GET.get('username')
     return render(
