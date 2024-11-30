@@ -13,9 +13,9 @@
             <p>Название: {{ query.title }}</p>
             <p>Описание: {{ query.description }}</p>
             <p>Категория: {{ query.category }}</p>
-        {% if plea.status == 'n' %}
+        {% if query.status == 'n' %}
             <p>Статус: Новая</p>
-        {% elif plea.status == 'a' %}
+        {% elif query.status == 'a' %}
             <p>Статус: принято в работу</p>
         {% else %}
             <p>Статус: Выполнено</p>
