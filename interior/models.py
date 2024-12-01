@@ -63,3 +63,6 @@ class Query(models.Model):
 
     def __str__(self):
         return self.title #Строка для представления объекта Model.
+
+    class Meta:
+        ordering = ['-creationDate']

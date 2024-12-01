@@ -71,6 +71,3 @@ class QueryForm(forms.Form):
     description = forms.CharField(max_length=1000)
     category = forms.ModelChoiceField(queryset=Category.objects.all())
     plan = forms.ImageField()
-
-class AddAdminForm(forms.Form):
-    adminUserName = forms.CharField(max_length=150)

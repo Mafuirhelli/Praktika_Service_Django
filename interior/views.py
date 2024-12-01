@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from .models import Query, Category, Profile
 from django.views import generic
 from django.contrib.auth import authenticate, login
-from .forms import RegisterForm, ProfileForm, QueryForm, LoginForm, AddAdminForm
+from .forms import RegisterForm, ProfileForm, QueryForm, LoginForm
 from django.contrib import messages
 from .forms import LoginForm
 from .forms import QueryForm
@@ -102,7 +102,7 @@ class QueryListView(LoginRequiredMixin,generic.ListView):
     model = Query
     template_name ='interior/query_list.html'
     def get_queryset(self):
-        return Query.objects.filter(author=self.request.user).ordered_by('-creationDate')
+        return Query.objects.filter(author=self.request.user)#.latest('-creationDate')
 
 class QueryDelete(DeleteView):
     success_url = reverse_lazy('querys')
@@ -111,23 +111,25 @@ class QueryListViewN(LoginRequiredMixin,generic.ListView):
     model = Query
     template_name ='interior/query_list_n.html'
     def get_queryset(self):
-        return Query.objects.filter(author=self.request.user).filter(status='n').order_by('-creationDate')
+        return Query.objects.filter(author=self.request.user).filter(status='n')#.latest('-creationDate')
 
 class QueryListViewA(LoginRequiredMixin,generic.ListView):
     model = Query
     template_name ='interior/query_list_a.html'
     def get_queryset(self):
-        return Query.objects.filter(author=self.request.user).filter(status='a').order_by('-creationDate')
+        return Query.objects.filter(author=self.request.user).filter(status='a')#.latest('creationDate')
 
 class QueryListViewD(LoginRequiredMixin,generic.ListView):
     model = Query
     template_name ='interior/query_list_d.html'
     def get_queryset(self):
-        return Query.objects.filter(author=self.request.user).filter(status='d').order_by('-creationDate')
+        return Query.objects.filter(author=self.request.user).filter(status='d')#.latest('creationDate')
 
 class QueryAddDesign(UpdateView):
     model = Query
     fields = ["design","status"]
+
+    template_name_suffix = "_add_design_form"
 
 class CategoryListView(LoginRequiredMixin,generic.ListView):
     model = Category
@@ -148,35 +150,13 @@ class AdminQueryListView(LoginRequiredMixin,generic.ListView):
     model = Query
     template_name ='interior/admin_query_list.html'
     def get_queryset(self):
-        return Query.objects.order_by('-creationDate')
+        return Query.objects#.latest('creationDate')
 
 
-class QueryAddDesign(UpdateView):
-    model = Query
-    fields = ["design","status"]
 
-    template_name_suffix = "_add_design_form"
 
 class SuperuserQueryListView(LoginRequiredMixin,generic.ListView):
     model = Query
     template_name ='interior/superuser_query_list.html'
     def get_queryset(self):
-        return Query.objects.filter(status='n').order_by('-creationDate')
-
-def QueryAddAdmin(request, pk):
-    query = get_object_or_404(Query, pk=pk)
-    admins = User.objects.all().filter(is_staff=True)
-
-    if request.method == 'POST':
-
-        form = AddAdminForm(request.POST)
-
-        if form.is_valid():
-            query.adminUserName = form.cleaned_data['adminUserName']
-            query.save()
-
-            return HttpResponseRedirect(reverse('supermanage') )
-
-    else:
-        form = AddAdminForm()
-        return render(request, 'interior/query_add_admin_form.html', {'form': form, 'query':query, 'admins':admins})
+        return Query.objects.filter(status='n')#.latest('creationDate')
