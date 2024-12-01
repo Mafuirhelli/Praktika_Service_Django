@@ -20,5 +20,5 @@ urlpatterns = [
  re_path(r'^category/create/$', views.CategoryCreateView.as_view(), name='category_create'),
  re_path(r'^adminquerys/$', views.AdminQueryListView.as_view(), name='adminquerys'),
  re_path(r'^query/(?P<pk>\d+)/complete/$', views.QueryAddDesign.as_view(), name='query_complete'),
- re_path(r'^supermanage/$', views.SuperuserQueryListView.as_view(), name='supermanage'),
+ re_path(r'^query/(?P<pk>\d+)/work/$', views.QueryAddDesign.as_view(), name='query_work'),
 ]

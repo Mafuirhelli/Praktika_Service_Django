@@ -2,18 +2,13 @@
 
 {% block content %}
   <h1>Все заявки</h1>
-
   {% if query_list %}
     <ul>
       {% for query in query_list %}
-      {% if query.adminUserName == user.username %}
       <li>
         <hr>
         <div style="display: flex; gap: 10px">
           <p>Дата создания: {{ query.creationDate }}</p>
-          {% if query.important == True %}
-          <p style="font-size: 20px; color: orangered">ВАЖНАЯ!</p>
-          {% endif %}
         </div>
         <p>Название: {{ query.title}}</p>
         <p>Описание: {{ query.description }}</p>
@@ -29,7 +24,6 @@
         {% endif %}
         <hr>
       </li>
-      {% endif %}
       {% endfor %}
     </ul>
   {% else %}

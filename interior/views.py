@@ -150,13 +150,4 @@ class AdminQueryListView(LoginRequiredMixin,generic.ListView):
     model = Query
     template_name ='interior/admin_query_list.html'
     def get_queryset(self):
-        return Query.objects#.latest('creationDate')
-
-
-
-
-class SuperuserQueryListView(LoginRequiredMixin,generic.ListView):
-    model = Query
-    template_name ='interior/superuser_query_list.html'
-    def get_queryset(self):
         return Query.objects.filter(status='n')#.latest('creationDate')
