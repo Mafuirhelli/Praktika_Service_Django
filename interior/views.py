@@ -88,8 +88,7 @@ def query_create(request):
             if request.user.is_authenticated:
                 username = request.user.username
             plan = form.cleaned_data.get("plan")
-            creationDate = form.cleaned_data.get("creationDate")
-            obj = Query.objects.create(title = title, description = description, category = category, plan = plan, creationDate = creationDate, author = User.objects.get(username = username))
+            obj = Query.objects.create(title = title, description = description, category = category, plan = plan, author = User.objects.get(username = username))
             obj.save()
             messages.success(request, 'Вы успешно создали заявку')
             return redirect('index')
@@ -105,6 +104,7 @@ class QueryListView(LoginRequiredMixin,generic.ListView):
         return Query.objects.filter(author=self.request.user)#.latest('-creationDate')
 
 class QueryDelete(DeleteView):
+    model = Query
     success_url = reverse_lazy('querys')
 
 class QueryListViewN(LoginRequiredMixin,generic.ListView):
