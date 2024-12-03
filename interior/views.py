@@ -91,7 +91,7 @@ def query_create(request):
             obj = Query.objects.create(title = title, description = description, plan = plan, author = User.objects.get(username = username))
             obj.save()
             for category in form.cleaned_data.get("category"):
-                obj.category.add(Category.objects.get(name = category))
+                obj.category.add(category)
             messages.success(request, 'Вы успешно создали заявку')
             return redirect('index')
         else:
@@ -152,4 +152,4 @@ class AdminQueryListView(LoginRequiredMixin,generic.ListView):
     model = Query
     template_name ='interior/admin_query_list.html'
     def get_queryset(self):
-        return Query.objects.filter(status='n')#.latest('creationDate')
+        return Query.objects.filter(status='n')

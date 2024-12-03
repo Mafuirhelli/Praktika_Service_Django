@@ -51,12 +51,11 @@ class Query(models.Model):
     plan = models.ImageField(upload_to ='images/', help_text="Выберите обложку для заявки", null=True)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     creationDate = models.DateField(default=date.today)
-    # test = models.TextField(default='qwerty')
     design = models.ImageField(upload_to ='images/', null=True)
     LOAN_STATUS = (
-        ('n', 'New'),
-        ('a', 'Accepted for work'),
-        ('d', 'Done'),
+        ('n', 'Новое'),
+        ('a', 'Принято в работу'),
+        ('d', 'Сделано'),
     )
     status = models.CharField(max_length=1, choices=LOAN_STATUS, blank=True, default='n')
 

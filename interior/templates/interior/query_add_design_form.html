@@ -5,6 +5,11 @@
 
     <form method="post" enctype="multipart/form-data">{% csrf_token %}
     {{ form.as_p }}
+        <p><strong>Cтатус категорий:</strong> 
+            <br> {% for category in query.category.all %} {{ category }}
+    <input type="radio" id="primary" name="status.{{ category.id }}" value="primary" /> <label for="primary">Основное</label>
+    <input type="radio" id="secondary" name="status.{{ category.id }}" value="secondary" /><label for="primary">Второстепенное</label><br> 
+         {% endfor %}</p>
     <input type="submit" value="Выполнить">
     </form>
 
