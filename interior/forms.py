@@ -69,5 +69,5 @@ class LoginForm(forms.Form):
 class QueryForm(forms.Form):
     title = forms.CharField(max_length=50)
     description = forms.CharField(max_length=1000)
-    category = forms.ModelChoiceField(queryset=Category.objects.all())
+    category = forms.MultipleChoiceField(choices=[(category.pk, category) for category in Category.objects.all()], widget=forms.CheckboxSelectMultiple())
     plan = forms.ImageField()

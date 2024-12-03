@@ -7,7 +7,7 @@
     </div>
     <div style="width: 50%">
       <p><strong>описание:</strong> {{ query.description }}</p>
-      <p><strong>категория:</strong> {{ query.category }}</p>
+      <p><strong>категория:</strong> {% for category in query.category.all %} {{ category }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
     </div>
   </div>
 {% endblock %}

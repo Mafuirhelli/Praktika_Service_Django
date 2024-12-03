@@ -12,7 +12,7 @@
         </div>
         <p>Название: {{ query.title}}</p>
         <p>Описание: {{ query.description }}</p>
-        <p>Категория: {{ query.category }}</p>
+        <p>Категория: {% for category in query.category.all %} {{ category }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
         {% if query.status == 'n' %}
         <p>Статус: Новая</p>
         <a href="{% url 'query_work' query.id %}">Принять в работу</a><br>

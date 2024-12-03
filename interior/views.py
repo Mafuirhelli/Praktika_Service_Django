@@ -84,12 +84,14 @@ def query_create(request):
         if form.is_valid():
             title = form.cleaned_data.get("title")
             description = form.cleaned_data.get("description")
-            category = form.cleaned_data.get("category")
+
             if request.user.is_authenticated:
                 username = request.user.username
             plan = form.cleaned_data.get("plan")
-            obj = Query.objects.create(title = title, description = description, category = category, plan = plan, author = User.objects.get(username = username))
+            obj = Query.objects.create(title = title, description = description, plan = plan, author = User.objects.get(username = username))
             obj.save()
+            for category in form.cleaned_data.get("category"):
+                obj.category.add(Category.objects.get(name = category))
             messages.success(request, 'Вы успешно создали заявку')
             return redirect('index')
         else:
